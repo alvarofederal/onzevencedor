@@ -13,7 +13,84 @@
 		<h:commandLink value="Adicionar Atleta" actionListener="#{atletaBean.create}" />
 		<h:panelGrid columns="2">
 			<h:outputLabel value="Filtrar jogadores por clube: " for="cbFiltroClube" />
-			
+			<h:selectOneMenu id="cbFiltroClube" value="#{atletaBean.filtroIdfClube}">
+				<f:selectItem itemLabel="--Nenhum--" noSelectionOption="true" />
+				<f:selectItems value="#{clubeBean.clubes}" var="club" 
+				    itemLabel="#{club.nome}" itemValue="#{club.idf}" />
+				    <f:ajax event="change" listener="#{atletaBean.filtrarAtletaPorClube}" 
+				        render="resultados" />
+			</h:selectOneMenu>
+		</h:panelGrid>
+		<h:dataTable value="#{atletaBean.atletas}" var="at" id="resultados" border="1">
+			<h:column>
+				<f:facet name="header">ID</f:facet>
+				<h:outputText value="#{at.idf}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Nome do atleta</f:facet>
+				<h:outputText value="#{at.nome}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Data de Nascimento</f:facet>
+				<h:outputText value="#{at.dtaNascimento}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Posição</f:facet>
+				<h:outputText value="#{at.posicao}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Clube</f:facet>
+				<h:outputText value="#{at.clube.nome}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">#</f:facet>
+				<h:commandLink id="lnkDelete" value="Alterar" action="#{atletaBean.update}"
+				    onclick="if(!confirm('Tem certeza que deseja excluir este dado?')) return false">
+					<f:setPropertyActionListener target="#{atletaBean.atleta}" value="#{at}" />
+				</h:commandLink>
+			</h:column>
+			<h:column>
+				<f:facet name="header">#</f:facet>
+				<h:commandLink value="Excluir" action="#{atletaBean.delete}" />
+			</h:column>
+		</h:dataTable>
+	</h:form>
+	
+	<h:form id="formEdicao" rendered="#{atletaBean.editMode}">
+		<h:panelGrid columns="2">
+			<h:outputLabel value="Nome do Atleta: " for="txtNomeAtleta" />
+			<h:panelGroup>
+				<h:inputText size="40" maxlength="40" value="#{atletaBean.atleta.nome}" id="txtNomeAtleta" />
+				<h:message for="txtNomeAtleta" />
+			</h:panelGroup>
+			<h:outputLabel value="Data de Nascimento: " for="txtDataNascimento" />
+			<h:panelGroup>
+				<h:inputText size="12" maxlength="12" required="true" label="Data de Nascimento" 
+				    value="#{atletaBean.atleta.dtaNascimento}" id="txtDataNascimento">
+				    <f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:inputText>
+				<h:message for="txtDataNascimento" />
+			</h:panelGroup>
+			<h:outputLabel value="Clube: " id="cbClube" />
+			<h:panelGroup>
+				<h:selectOneMenu value="#{atletaBean.idfClube}" required="true" label="Clube">
+					<f:selectItem itemLabel="--Selecione--" noSelectionOption="true" />
+					<f:selectItems value="#{atletaBean.clubes}" var="club" 
+					    itemLabel="#{club.nome}" itemValue="#{club.idf}" />
+				</h:selectOneMenu>
+				<h:message for="cbClube" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:selectOneRadio id="cbPosicao" value="#{atletaBean.atleta.posicao}" 
+				    required="true" label="Posição">
+				    <f:selectItems value="#{atletaBean.posicoes}" var="posicao" />
+			    </h:selectOneRadio>
+			    <h:message for="cbPosicao" />
+			</h:panelGroup>
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+			<h:commandButton value="Salvar" actionListener="#{atletaBean.salvar}" />
+			<h:commandButton value="Cancelar" action="#{atletaBean.cancel}" immediate="true" />
 		</h:panelGrid>
 	</h:form>
 </h:body>
