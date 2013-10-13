@@ -1,7 +1,7 @@
 onzevencedor
 ============
 
-Projeto de Integração Maven, JSF 2, Spring e Hibernate.
+Projeto de Integração Maven, JSF 2, Spring e Hibernate. Parte Integrante da Revista Java Magazine ed. 101.
 
 Script para criação das tabelas do banco, sendo que o nome do banco é: onzeVencedorDB.
 
